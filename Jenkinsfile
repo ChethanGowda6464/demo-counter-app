@@ -16,5 +16,28 @@ pipeline{
                            }
                     }
          }
+         stage('Intigration Testing'){
+                steps{
+                     script{
+                        sh 'mvn verify -DskipUnitTests'
+                           }
+                    }
+         }
+          stage('Maven Build'){
+                steps{
+                     script{
+                        sh 'mvn clean install'
+                           }
+                    }
+         }
+         stage('static code analysis'){
+                steps{
+                     script{
+                        withSonarQubeEnv(credentialsId: 'sonar-id') {
+                              sh 'mvn clean package sonar:sonar'
+                             }
+                           }
+                    }
+         }
      }
 }
